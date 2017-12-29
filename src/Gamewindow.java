@@ -11,11 +11,23 @@ public class Gamewindow extends JFrame {
     public Gamewindow() {
         this.setSize(400, 600);
 
+        this.setupGmameCanvas();
+
+        this.setVisible(true);
+
+        this.event();
+
+    }
+
+    private void setupGmameCanvas () {
+
         this.gameCanvas = new GameCanvas();
 
         this.add(this.gameCanvas);
 
-        this.setVisible(true);
+    }
+
+    private void event () {
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -23,7 +35,7 @@ public class Gamewindow extends JFrame {
 
                 gameCanvas.positionPlayerX = e.getX();
 
-                gameCanvas.getPositionPlayerY = e.getY();
+                gameCanvas.positionPlayerY = e.getY();
 
 
             }
@@ -35,7 +47,6 @@ public class Gamewindow extends JFrame {
                 System.exit(1);
             }
         });
-
 
     }
 
