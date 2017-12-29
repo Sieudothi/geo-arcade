@@ -16,7 +16,7 @@ public class GameCanvas extends JPanel{
     BufferedImage DangerousEnemy;
     public int positionPlayerX = 200;
     public int positionPlayerY = 300;
-    public int positionEnemyX ;
+    public int positionEnemyX;
     public int positionEnemyY = 30;
     public int randomEnemyX = rand(0, 400);
     public int randomEnemyY = 0;
@@ -115,6 +115,7 @@ public class GameCanvas extends JPanel{
 
     public void renderAll() {
 
+        positionEnemyY += 2;
 
         randomEnemyY += yVelocity;
         randomEnemyX += xVelocity;
@@ -133,10 +134,9 @@ public class GameCanvas extends JPanel{
         this.graphics.drawImage(this.player, positionPlayerX -20 , positionPlayerY - 30 , null);
         for (int i = 0; i < 10; i ++) {
             positionEnemyX = rand(0,400);
-            positionEnemyY += 2;
-            this.graphics.drawImage(this.enemy, randomEnemyX, positionEnemyY, null);
-
+            this.graphics.drawImage(this.enemy, positionEnemyX, positionEnemyY, null);
         }
+
         this.graphics.drawImage(this.DangerousEnemy, randomEnemyX, randomEnemyY, null);
         this.repaint();
     }
