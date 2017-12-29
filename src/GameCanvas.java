@@ -113,7 +113,7 @@ public class GameCanvas extends JPanel{
 
 
 
-    public void renderAll() {
+    public void renderAll( ) {
 
         positionEnemyY += 2;
 
@@ -132,8 +132,9 @@ public class GameCanvas extends JPanel{
 
         this.graphics.drawImage(this.background, 0,0,null);
         this.graphics.drawImage(this.player, positionPlayerX -20 , positionPlayerY - 30 , null);
+        int step = 400 / 10;
         for (int i = 0; i < 10; i ++) {
-            positionEnemyX = rand(0,400);
+            positionEnemyX = i * step;
             this.graphics.drawImage(this.enemy, positionEnemyX, positionEnemyY, null);
         }
 
