@@ -4,40 +4,42 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
+import java.util.Vector;
+
+
 
 public class GameCanvas extends JPanel{
 
     BufferedImage background;
-    BufferedImage player;
-    BufferedImage enemy;
+
     BufferedImage backBuffered;
+
+//    BufferedImage player;
+
     Graphics graphics;
-    BufferedImage DangerousEnemy;
+
+    Vector<BulletPlayer> vectorBulletPlayer;
+
+    Vector<Enemy> vectorEnemy;
+
+    Vector<BulletXEnemy> vectorBulletXEnemy;
+
     public int positionPlayerX = 200;
+
     public int positionPlayerY = 300;
-    public int positionEnemyX;
-    public int positionEnemyY = 30;
-    public int randomEnemyX = rand(0, 400);
-    public int randomEnemyY = 0;
-    public int xVelocity = 1;
-    public int yVelocity = 1;
 
-    public static int rand(int min, int max) {
-        try {
-            Random rn = new Random();
-            int range = max - min + 1;
-            int randomNum = min + rn.nextInt(range);
-            return randomNum;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
+    public int countBulletPlayer = 0;
+
+    public int countBulletSuperEnemy = 0;
+
+    public int countEnemy;
 
 
+    Player player;
 
+    DangerousEnemy dangerousEnemy;
 
+    XEnemy xEnemy;
 
 
     public GameCanvas() {
@@ -55,6 +57,8 @@ public class GameCanvas extends JPanel{
         this.setupEnemy();
 
         this.setupDangerousEnemy();
+
+        this.setupSuperEnemy();
 
     }
 
@@ -75,36 +79,40 @@ public class GameCanvas extends JPanel{
     }
 
     private void setupPlayer() {
-        try {
-            this.player = ImageIO.read(new File("resources/player/straight.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        player = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
+
+//        player1 = new Player("resources/player/straight.png");
+
+//        try {
+//            this.player = ImageIO.read(new File("resources/player/straight.png"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        this.vectorBulletPlayer = new Vector<>();
     }
 
 
 
     public void setupEnemy () {
 
-            try {
-                this.enemy = ImageIO.read(new File( "resources/square/enemy_square_small.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        this.vectorEnemy = new Vector<>();
 
     }
 
     public void setupDangerousEnemy () {
-        try {
-            this.DangerousEnemy = ImageIO.read(new File("resources/square/enemy_square_small.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        dangerousEnemy = new DangerousEnemy("resources/square/enemy_square_small.png");
+
+
     }
 
+    public void setupSuperEnemy() {
 
+        xEnemy = new XEnemy("resources/square/enemy_square_medium.png");
+
+        this.vectorBulletXEnemy = new Vector<>();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -115,32 +123,127 @@ public class GameCanvas extends JPanel{
 
     public void renderAll( ) {
 
-        positionEnemyY += 2;
 
-        randomEnemyY += yVelocity;
-        randomEnemyX += xVelocity;
-
-        if (randomEnemyX == 380) {
-             xVelocity = -2;
-        } else if ( randomEnemyX == 0) {
-            xVelocity = 2;
-        } else if ( randomEnemyY == 560) {
-            yVelocity = -2;
-        } else if ( randomEnemyY == 0) {
-            yVelocity = 2;
-        }
 
         this.graphics.drawImage(this.background, 0,0,null);
-        this.graphics.drawImage(this.player, positionPlayerX -20 , positionPlayerY - 30 , null);
-        int step = 400 / 10;
-        for (int i = 0; i < 10; i ++) {
-            positionEnemyX = i * step;
-            this.graphics.drawImage(this.enemy, positionEnemyX, positionEnemyY, null);
+
+//        this.graphics.drawImage(this.player, positionPlayerX, positionPlayerY, null);
+
+        player = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
+
+        player.render(graphics);
+
+        //render DangerousEnemy
+
+        dangerousEnemy.render(graphics);
+
+        //render XEnemy
+
+        xEnemy.render(graphics);
+
+        //render Enemy
+
+        for (Enemy enemy: this.vectorEnemy) {
+
+            enemy.render(graphics);
         }
 
-        this.graphics.drawImage(this.DangerousEnemy, randomEnemyX, randomEnemyY, null);
+        //render BullerPlayer
+
+        for (BulletPlayer bulletPlayer: this.vectorBulletPlayer) {
+
+            bulletPlayer.render(graphics);
+        }
+
+        //render BullerSuperEnemy
+
+        for (BulletXEnemy bulletXEnemy : this.vectorBulletXEnemy) {
+
+            bulletXEnemy.render(graphics);
+        }
+
         this.repaint();
+    }
+
+    public void runAll() {
+
+//        player1 = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
+
+        // run DangerousEnemy
+
+        dangerousEnemy.run();
+
+        //run XEnemy
+
+        xEnemy.run();
+
+        //run BulletPlayer
+
+        if (this.countBulletPlayer >= 10) {
+
+            BulletPlayer bulletPlayer = new BulletPlayer(positionPlayerX, positionPlayerY,"resources/player/player_bullet.png", 3);
+
+            this.vectorBulletPlayer.add(bulletPlayer);
+
+            this.countBulletPlayer = 0;
+
+        } else {
+
+            this.countBulletPlayer +=1;
+
+        }
+
+        for (BulletPlayer bulletPlayer: this.vectorBulletPlayer) {
+
+            bulletPlayer.run();
+
+        }
+
+        //run BulletXEnemy
+
+        if (this.countBulletSuperEnemy >= 30) {
+
+            BulletXEnemy bulletXEnemy = new BulletXEnemy(xEnemy.superEnemyX, xEnemy.superEnemyY, "resources/square/enemy_square_bullet.png");
+
+            this.vectorBulletXEnemy.add(bulletXEnemy);
+
+            this.countBulletSuperEnemy = 0;
+
+        } else {
+
+            this.countBulletSuperEnemy += 1;
+        }
+
+        for (BulletXEnemy bulletXEnemy : this.vectorBulletXEnemy) {
+
+            bulletXEnemy.run();
+
+        }
+
+        //run Enemy
+
+        if (this.countEnemy >= 50) {
+
+            Enemy enemy = new Enemy("resources/square/enemy_square_small.png");
+
+            this.vectorEnemy.add(enemy);
+
+            this.countEnemy = 0;
+
+        } else {
+
+            this.countEnemy +=1;
+
+        }
+
+
+        for (Enemy enemy: this.vectorEnemy) {
+
+            enemy.run();
+
+        }
     }
 
 
 }
+

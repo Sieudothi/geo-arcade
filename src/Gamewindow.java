@@ -4,8 +4,12 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+
 public class Gamewindow extends JFrame {
+
     GameCanvas gameCanvas;
+
+
     private long lastTime;
 
     public Gamewindow() {
@@ -51,10 +55,11 @@ public class Gamewindow extends JFrame {
     }
 
     public void gameLoop() {
-        
+
         while (true) {
             long currentTime = System.nanoTime();
             if (currentTime - this.lastTime >= 17_000_000) {
+                this.gameCanvas.runAll();
                 this.gameCanvas.renderAll();
                 this.lastTime = currentTime;
             }
