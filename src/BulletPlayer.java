@@ -30,7 +30,7 @@ public class BulletPlayer {
 
     public void run () {
 
-        if (this.xRight == 0) {
+        if (this.xRight <= 0) {
 
             this.xLeft -= this.speedX;
 
