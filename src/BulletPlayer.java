@@ -7,32 +7,62 @@ import java.io.IOException;
 
 public class BulletPlayer {
 
-    public int x;
+    public int xRight;
+    public int xLeft;
     public  int y;
     public BufferedImage image;
-    public int speed;
+    public int speedX;
+    public int speedY;
 
-    public BulletPlayer (int a, int b, String url, int speed) {
+    public BulletPlayer(int a, int b, int c, String url) {
 
-        this.x = a;
-        this.y = b;
+        this.xRight = a;
+        this.xLeft = b;
+        this.y = c;
         try {
             this.image = ImageIO.read (new File(url));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.speed = speed;
+        this.speedX = 1;
+        this.speedY = 3;
     }
 
     public void run () {
 
-        this.y -= this.speed;
+        if (this.xRight == 0) {
+
+            this.xLeft -= this.speedX;
+
+            this.y -= this.speedY;
+
+        } else {
+
+            this.xRight += this.speedX;
+
+            this.y -= this.speedY;
+
+        }
+
+
+
+
 
     }
 
     public void render (Graphics graphics) {
 
-        graphics.drawImage(this.image, this.x, this.y, null);
+        if( this.xRight== 0) {
+
+            graphics.drawImage(this.image, this.xLeft, this.y, null);
+
+        } else {
+
+            graphics.drawImage(this.image, this.xRight, this.y, null);
+
+        }
+
+
 
     }
 }

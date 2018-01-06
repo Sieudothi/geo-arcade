@@ -18,7 +18,9 @@ public class GameCanvas extends JPanel{
 
     Graphics graphics;
 
-    Vector<BulletPlayer> vectorBulletPlayer;
+    Vector<BulletPlayer> vectorBulletPlayerRight;
+
+    Vector<BulletPlayer> vectorBulletPlayerLeft;
 
     Vector<Enemy> vectorEnemy;
 
@@ -89,7 +91,10 @@ public class GameCanvas extends JPanel{
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        this.vectorBulletPlayer = new Vector<>();
+
+        this.vectorBulletPlayerRight = new Vector<>();
+
+        this.vectorBulletPlayerLeft = new Vector<>();
     }
 
 
@@ -148,11 +153,18 @@ public class GameCanvas extends JPanel{
             enemy.render(graphics);
         }
 
-        //render BullerPlayer
+        //render BullerPlayerRight
 
-        for (BulletPlayer bulletPlayer: this.vectorBulletPlayer) {
+        for (BulletPlayer bulletPlayerRight : this.vectorBulletPlayerRight) {
 
-            bulletPlayer.render(graphics);
+            bulletPlayerRight.render(graphics);
+        }
+
+        //render BullerPlayerLeft
+
+        for (BulletPlayer bulletPlayerLeft : this.vectorBulletPlayerLeft) {
+
+            bulletPlayerLeft.render(graphics);
         }
 
         //render BullerSuperEnemy
@@ -177,13 +189,13 @@ public class GameCanvas extends JPanel{
 
         xEnemy.run();
 
-        //run BulletPlayer
+        //run BulletPlayerRight
 
-        if (this.countBulletPlayer >= 10) {
+        if (this.countBulletPlayer >= 5) {
 
-            BulletPlayer bulletPlayer = new BulletPlayer(positionPlayerX, positionPlayerY,"resources/player/player_bullet.png", 3);
+            BulletPlayer bulletPlayerRight = new BulletPlayer(positionPlayerX, 0, positionPlayerY, "resources/player/player_bullet.png");
 
-            this.vectorBulletPlayer.add(bulletPlayer);
+            this.vectorBulletPlayerRight.add(bulletPlayerRight);
 
             this.countBulletPlayer = 0;
 
@@ -193,11 +205,34 @@ public class GameCanvas extends JPanel{
 
         }
 
-        for (BulletPlayer bulletPlayer: this.vectorBulletPlayer) {
+        for (BulletPlayer bulletPlayerRight : this.vectorBulletPlayerRight) {
 
-            bulletPlayer.run();
+            bulletPlayerRight.run();
 
         }
+
+        //run BulletPlayerLeft
+
+        if (this.countBulletPlayer >= 5) {
+
+            BulletPlayer bulletPlayerLeft = new BulletPlayer(0, positionPlayerX, positionPlayerY,"resources/player/player_bullet.png");
+
+            this.vectorBulletPlayerLeft.add(bulletPlayerLeft);
+
+            this.countBulletPlayer = 0;
+
+        } else {
+
+            this.countBulletPlayer +=1;
+
+        }
+
+        for (BulletPlayer bulletPlayerLeft : this.vectorBulletPlayerLeft) {
+
+            bulletPlayerLeft.run();
+
+        }
+
 
         //run BulletXEnemy
 
