@@ -8,7 +8,7 @@ public class BulletPlayer extends GameObject {
     public BulletPlayer() {
         this.image = Utils.loadImage("resources/player/player_bullet.png");
 
-        this.velocity = new Vector2D(1,1);
+        this.velocity = new Vector2D(3,3);
 
     }
 

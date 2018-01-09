@@ -15,10 +15,10 @@ public class Player extends GameObject {
 
         super.run();
 
-        if (this.count == 30) {
+        if (this.count == 5) {
             BulletPlayer bulletPlayer = new BulletPlayer();
             bulletPlayer.position.set(this.position);
-            bulletPlayer.velocity.set(1.0f, 1.0f);
+            bulletPlayer.velocity.set(3.0f, 3.0f);
             GameObject.add(bulletPlayer);
             this.count = 0;
         } else {
