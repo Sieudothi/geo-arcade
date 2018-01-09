@@ -18,7 +18,7 @@ public class Player extends GameObject {
         if (this.count == 30) {
             BulletPlayer bulletPlayer = new BulletPlayer();
             bulletPlayer.position.set(this.position);
-            bulletPlayer.velocity.set(0.0f, 5.0f);
+            bulletPlayer.velocity.set(1.0f, 1.0f);
             GameObject.add(bulletPlayer);
             this.count = 0;
         } else {

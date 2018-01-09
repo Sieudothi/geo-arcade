@@ -1,6 +1,4 @@
 
-
-
 public class Square extends GameObject {
     public Vector2D velocity;
 

@@ -37,7 +37,6 @@ public class GameObject {
 
 
 
-
     }
 
     public void render(Graphics graphics) {

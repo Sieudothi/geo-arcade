@@ -17,7 +17,6 @@ public class GameCanvas extends JPanel {
         Graphics graphics;
 
         public Vector2D positionPlayer = new Vector2D();
-        public Vector2D positionsquareMedium = new Vector2D();
 
 
 
@@ -65,8 +64,9 @@ public class GameCanvas extends JPanel {
         }
 
         private void setupMediumSquare (){
-            this.mediumSquare = new MediumSquare();
-            GameObject.add(mediumSquare);
+
+            GameObject.add(new SquareSqwaner2());
+
         }
 
         @Override
@@ -81,37 +81,10 @@ public class GameCanvas extends JPanel {
         }
 
         public void runAll() {
+
             this.player.position.set(this.positionPlayer);
 
             GameObject.runAll();
-
-            if (this.positionsquareMedium.x == 380) {
-
-                mediumSquare.velocity.x = -3;
-
-
-            } else if ( this.positionsquareMedium.x == 0) {
-
-                mediumSquare.velocity.x = 3;
-
-
-
-            } else if ( this.positionsquareMedium.y == 560) {
-
-                mediumSquare.velocity.y = -3;
-
-
-            } else if ( this.positionsquareMedium.y == 0) {
-
-                mediumSquare.velocity.y = 3;
-
-            }
-
-//            this.mediumSquare.velocity.set(a, b);
-
-            this.positionsquareMedium.addUp(this.mediumSquare.velocity);
-
-
 
         }
     }

@@ -1,6 +1,4 @@
-import java.awt.*;
 import java.util.Random;
-import java.util.Vector;
 
 public class SquareSqwaner extends GameObject {
     private int count = 0;
@@ -13,6 +11,7 @@ public class SquareSqwaner extends GameObject {
     @Override
     public void run() {
         super.run();
+
         if (this.count >= 20) {
             Square square = new Square();
             square.position.set(random.nextInt(400), 0.0f);
