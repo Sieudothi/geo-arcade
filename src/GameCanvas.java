@@ -1,284 +1,118 @@
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
+import java.util.Random;
 
 
-
-public class GameCanvas extends JPanel{
-
-    BufferedImage background;
-
-    BufferedImage backBuffered;
-
-//    BufferedImage player;
-
-    Graphics graphics;
-
-    Vector<BulletPlayer> vectorBulletPlayerRight;
-
-    Vector<BulletPlayer> vectorBulletPlayerLeft;
-
-    Vector<Enemy> vectorEnemy;
-
-    Vector<BulletXEnemy> vectorBulletXEnemy;
-
-    public int positionPlayerX = 200;
-
-    public int positionPlayerY = 300;
-
-    public int countBulletPlayer = 0;
-
-    public int countBulletSuperEnemy = 0;
-
-    public int countEnemy;
+public class GameCanvas extends JPanel {
 
 
-    Player player;
+        Background background;
+        Player player;
+        BulletPlayer bulletPlayer;
+        MediumSquare mediumSquare;
+        BufferedImage backBuffered;
+        Graphics graphics;
 
-    DangerousEnemy dangerousEnemy;
+        public Vector2D positionPlayer = new Vector2D();
+        public Vector2D positionsquareMedium = new Vector2D();
 
-    XEnemy xEnemy;
 
 
     public GameCanvas() {
-
-        this.setSize(400, 600);
-
-        this.setVisible(true);
-
-        this.setupbackBuffered();
-
-        this.setupBackground();
-
-        this.setupPlayer();
-
-        this.setupEnemy();
-
-        this.setupDangerousEnemy();
-
-        this.setupSuperEnemy();
-
-    }
-
-    private void setupbackBuffered () {
-
-        this.backBuffered = new BufferedImage(400, 600, BufferedImage.TYPE_4BYTE_ABGR);
-        this.graphics = this.backBuffered.getGraphics();
-
-    }
-
-    private void setupBackground () {
-        try {
-            this.background = ImageIO.read(new File("resources/background/background.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            this.setSize(400, 600);
+            this.setVisible(true);
+            this.setupBackBuffered();
+            this.setupBackground();
+            this.setupPlayer();
+            this.setupSquare();
+            this.setupMediumSquare();
         }
 
-    }
+        public static float randFloat(float min, float max) {
 
-    private void setupPlayer() {
+            Random rand = new Random();
 
-        player = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
+            float result = rand.nextFloat() * (max - min) + min;
 
-//        player1 = new Player("resources/player/straight.png");
-
-//        try {
-//            this.player = ImageIO.read(new File("resources/player/straight.png"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        this.vectorBulletPlayerRight = new Vector<>();
-
-        this.vectorBulletPlayerLeft = new Vector<>();
-    }
-
-
-
-    public void setupEnemy () {
-
-        this.vectorEnemy = new Vector<>();
-
-    }
-
-    public void setupDangerousEnemy () {
-
-        dangerousEnemy = new DangerousEnemy("resources/square/enemy_square_small.png");
-
-
-    }
-
-    public void setupSuperEnemy() {
-
-        xEnemy = new XEnemy("resources/square/enemy_square_medium.png");
-
-        this.vectorBulletXEnemy = new Vector<>();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        g.drawImage(this.backBuffered,0,0,null);
-    }
-
-
-
-    public void renderAll( ) {
-
-
-
-        this.graphics.drawImage(this.background, 0,0,null);
-
-//        this.graphics.drawImage(this.player, positionPlayerX, positionPlayerY, null);
-
-        player = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
-
-        player.render(graphics);
-
-        //render DangerousEnemy
-
-        dangerousEnemy.render(graphics);
-
-        //render XEnemy
-
-        xEnemy.render(graphics);
-
-        //render Enemy
-
-        for (Enemy enemy: this.vectorEnemy) {
-
-            enemy.render(graphics);
-        }
-
-        //render BullerPlayerRight
-
-        for (BulletPlayer bulletPlayerRight : this.vectorBulletPlayerRight) {
-
-            bulletPlayerRight.render(graphics);
-        }
-
-        //render BullerPlayerLeft
-
-        for (BulletPlayer bulletPlayerLeft : this.vectorBulletPlayerLeft) {
-
-            bulletPlayerLeft.render(graphics);
-        }
-
-        //render BullerSuperEnemy
-
-        for (BulletXEnemy bulletXEnemy : this.vectorBulletXEnemy) {
-
-            bulletXEnemy.render(graphics);
-        }
-
-        this.repaint();
-    }
-
-    public void runAll() {
-
-//        player1 = new Player(positionPlayerX, positionPlayerY,"resources/player/straight.png");
-
-        // run DangerousEnemy
-
-        dangerousEnemy.run();
-
-        //run XEnemy
-
-        xEnemy.run();
-
-        //run BulletPlayerRight
-
-        if (this.countBulletPlayer >= 5) {
-
-            BulletPlayer bulletPlayerRight = new BulletPlayer(positionPlayerX, 0, positionPlayerY, "resources/player/player_bullet.png");
-
-            this.vectorBulletPlayerRight.add(bulletPlayerRight);
-
-            this.countBulletPlayer = 0;
-
-        } else {
-
-            this.countBulletPlayer +=1;
+            return result;
 
         }
 
-        for (BulletPlayer bulletPlayerRight : this.vectorBulletPlayerRight) {
-
-            bulletPlayerRight.run();
-
+        private void setupBackBuffered() {
+            this.backBuffered = new BufferedImage(400, 600, BufferedImage.TYPE_4BYTE_ABGR);
+            this.graphics = this.backBuffered.getGraphics();
         }
 
-        //run BulletPlayerLeft
-
-        if (this.countBulletPlayer >= 5) {
-
-            BulletPlayer bulletPlayerLeft = new BulletPlayer(0, positionPlayerX, positionPlayerY,"resources/player/player_bullet.png");
-
-            this.vectorBulletPlayerLeft.add(bulletPlayerLeft);
-
-            this.countBulletPlayer = 0;
-
-        } else {
-
-            this.countBulletPlayer +=1;
-
+        private void setupBackground() {
+            this.background = new Background();
         }
 
-        for (BulletPlayer bulletPlayerLeft : this.vectorBulletPlayerLeft) {
+        private void setupPlayer() {
+            this.player = new Player();
 
-            bulletPlayerLeft.run();
+            this.bulletPlayer = new BulletPlayer();
 
+            GameObject.add(bulletPlayer);
+
+            GameObject.add(player);
         }
 
-
-        //run BulletXEnemy
-
-        if (this.countBulletSuperEnemy >= 30) {
-
-            BulletXEnemy bulletXEnemy = new BulletXEnemy(xEnemy.superEnemyX, xEnemy.superEnemyY, "resources/square/enemy_square_bullet.png");
-
-            this.vectorBulletXEnemy.add(bulletXEnemy);
-
-            this.countBulletSuperEnemy = 0;
-
-        } else {
-
-            this.countBulletSuperEnemy += 1;
+        private void setupSquare() {
+            GameObject.add(new SquareSqwaner());
         }
 
-        for (BulletXEnemy bulletXEnemy : this.vectorBulletXEnemy) {
-
-            bulletXEnemy.run();
-
+        private void setupMediumSquare (){
+            this.mediumSquare = new MediumSquare();
+            GameObject.add(mediumSquare);
         }
 
-        //run Enemy
-
-        if (this.countEnemy >= 50) {
-
-            Enemy enemy = new Enemy("resources/square/enemy_square_small.png");
-
-            this.vectorEnemy.add(enemy);
-
-            this.countEnemy = 0;
-
-        } else {
-
-            this.countEnemy +=1;
-
+        @Override
+        protected void paintComponent(Graphics g) {
+            g.drawImage(this.backBuffered, 0, 0, null);
         }
 
+        public void renderAll() {
+            this.background.render(graphics);
+            GameObject.renderAll(graphics);
+            this.repaint();
+        }
 
-        for (Enemy enemy: this.vectorEnemy) {
+        public void runAll() {
+            this.player.position.set(this.positionPlayer);
 
-            enemy.run();
+            GameObject.runAll();
+
+            if (this.positionsquareMedium.x == 380) {
+
+                mediumSquare.velocity.x = -3;
+
+
+            } else if ( this.positionsquareMedium.x == 0) {
+
+                mediumSquare.velocity.x = 3;
+
+
+
+            } else if ( this.positionsquareMedium.y == 560) {
+
+                mediumSquare.velocity.y = -3;
+
+
+            } else if ( this.positionsquareMedium.y == 0) {
+
+                mediumSquare.velocity.y = 3;
+
+            }
+
+//            this.mediumSquare.velocity.set(a, b);
+
+            this.positionsquareMedium.addUp(this.mediumSquare.velocity);
+
+
 
         }
     }
-
-
-}
 

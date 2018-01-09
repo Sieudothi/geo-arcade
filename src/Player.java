@@ -1,43 +1,30 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.Vector;
+
+public class Player extends GameObject {
 
 
-public class Player extends JFrame{
+    public int count = 0;
 
-    GameCanvas gameCanvas;
+    public Player() {
+        this.image = Utils.loadImage("resources/player/straight.png");
 
-    public int positionPlayerX;
+    }
 
-    public int positionPlayerY;
+    @Override
+    public void run() {
 
-    public BufferedImage image;
+        super.run();
 
-
-
-    public Player(int a, int b, String url) {
-
-        this.positionPlayerX = a;
-
-        this.positionPlayerY = b;
-
-
-        try {
-            this.image = ImageIO.read(new File(url));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (this.count == 30) {
+            BulletPlayer bulletPlayer = new BulletPlayer();
+            bulletPlayer.position.set(this.position);
+            bulletPlayer.velocity.set(0.0f, 5.0f);
+            GameObject.add(bulletPlayer);
+            this.count = 0;
+        } else {
+            this.count += 1;
         }
 
     }
 
-
-
-    public void render(Graphics graphics) {
-
-        graphics.drawImage(this.image, this.positionPlayerX -20 , this.positionPlayerY - 30 , null);
-
-    }
 }

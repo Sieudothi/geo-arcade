@@ -1,68 +1,26 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.Vector;
 
+public class BulletPlayer extends GameObject {
+    public Vector2D velocity;
 
-public class BulletPlayer {
+    public Vector vectorBulletPlayer = new Vector<>();
 
-    public int xRight;
-    public int xLeft;
-    public  int y;
-    public BufferedImage image;
-    public int speedX;
-    public int speedY;
+    public BulletPlayer() {
+        this.image = Utils.loadImage("resources/player/player_bullet.png");
 
-    public BulletPlayer(int a, int b, int c, String url) {
-
-        this.xRight = a;
-        this.xLeft = b;
-        this.y = c;
-        try {
-            this.image = ImageIO.read (new File(url));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.speedX = 1;
-        this.speedY = 3;
-    }
-
-    public void run () {
-
-        if (this.xRight <= 0) {
-
-            this.xLeft -= this.speedX;
-
-            this.y -= this.speedY;
-
-        } else {
-
-            this.xRight += this.speedX;
-
-            this.y -= this.speedY;
-
-        }
-
-
-
-
+        this.velocity = new Vector2D(1,1);
 
     }
 
-    public void render (Graphics graphics) {
+    @Override
+    public void run() {
 
-        if( this.xRight== 0) {
+        super.run();
 
-            graphics.drawImage(this.image, this.xLeft, this.y, null);
-
-        } else {
-
-            graphics.drawImage(this.image, this.xRight, this.y, null);
-
-        }
-
-
+        this.position.subtractBy(this.velocity);
 
     }
+
+
+
 }

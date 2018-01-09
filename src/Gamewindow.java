@@ -37,9 +37,7 @@ public class Gamewindow extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
 
-                gameCanvas.positionPlayerX = e.getX();
-
-                gameCanvas.positionPlayerY = e.getY();
+                gameCanvas.positionPlayer.set(e.getX(), e.getY());
 
 
             }
@@ -60,6 +58,7 @@ public class Gamewindow extends JFrame {
             long currentTime = System.nanoTime();
             if (currentTime - this.lastTime >= 17_000_000) {
                 this.gameCanvas.runAll();
+                System.out.println(gameCanvas.mediumSquare.position.x);
                 this.gameCanvas.renderAll();
                 this.lastTime = currentTime;
             }
